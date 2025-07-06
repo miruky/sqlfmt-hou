@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="sqlfmt-hou">
+  <title>sqlfmt-hou</title>
+  <style>
+    svg {
+      --ink: #1f2328;
+      --accent: #2e7fb8;
+      color: var(--ink);
+    }
+    @media (prefers-color-scheme: dark) {
+      svg { --ink: #e6edf3; --accent: #6db3e8; }
+    }
+  </style>
+  <g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round">
+    <ellipse cx="64" cy="34" rx="34" ry="14"/>
+    <path d="M30 34 V64 C30 72, 45 78, 64 78 C83 78, 98 72, 98 64 V34"/>
+  </g>
+  <g stroke="var(--accent)" stroke-width="6" stroke-linecap="round">
+    <line x1="38" y1="96" x2="74" y2="96"/>
+    <line x1="38" y1="110" x2="62" y2="110"/>
+  </g>
+</svg>
