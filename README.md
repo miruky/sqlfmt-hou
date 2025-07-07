@@ -13,9 +13,9 @@
 
 ## 概要
 
-手元に届くSQLは、ログから拾った1行の塊だったり、MySQLの backtick とSQL Serverの角括弧が混ざったものだったりする。読める形に整えて、いま使うデータベースの方言に直す——この2つを一度にやるのがsqlfmt-houで、貼り付ければ即座に右ペインへ結果が出る。サーバーには何も送らない。
+手元に届くSQLは、ログから拾った1行の塊だったり、MySQLの backtick とSQL Serverの角括弧が混ざったものだったりする。読める形に整えて、いま使うデータベースの方言に直す——この2つを一度にやるのがsqlfmt-houで、貼り付ければ即座に右ペインへ結果が出る。結果はキーワード・文字列・数値・コメントを色分けして表示し、サーバーには何も送らない。
 
-整形は「主要句(SELECT・FROM・WHEREなど)の前で改行し、中身を1段下げ、AND/ORで折り返す」という保守的な規則に絞っている。方言変換は確実に機械変換できる2点だけを扱う: 識別子の引用符の付け替えと、`LIMIT n OFFSET m` ↔ `FETCH FIRST` ↔ `TOP n` の書き換えだ。
+整形は「主要句(SELECT・FROM・WHEREなど)の前で改行し、中身を1段下げ、AND/ORで折り返す」という保守的な規則に絞っている。`BETWEEN a AND b` の AND は条件の一部なので折り返さず、`;` で区切られた複数の文はそれぞれを1行空けて並べる。方言変換は確実に機械変換できる2点だけを扱う: 識別子の引用符の付け替えと、`LIMIT n OFFSET m` ↔ `FETCH FIRST` ↔ `TOP n` の書き換えだ。
 
 ## アーキテクチャ
 
@@ -79,6 +79,7 @@ format('select `id` from t limit 5', { dialect: 'sqlserver' });
 - `src/`
   - `tokenize.ts` — 文字列・引用識別子・コメントを壊さないトークナイザ
   - `format.ts` — 整形と方言変換(LIMIT・引用符)
+  - `highlight.ts` — トークナイザを使い、空白を保ったまま結果を色分けするHTMLを作る
   - `main.ts` + `index.html` — 2ペインのUI
 - `.github/workflows/` — CIとPagesデプロイ
 
