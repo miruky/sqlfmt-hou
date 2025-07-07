@@ -133,6 +133,23 @@ describe('LIMITの方言変換', () => {
   });
 });
 
+describe('BETWEENと複数文', () => {
+  it('BETWEENのANDは折り返さず、続く論理ANDは折り返す', () => {
+    const out = format('select * from t where x between 1 and 10 and y = 2');
+    expect(out).toContain('WHERE x BETWEEN 1 AND 10\n  AND y = 2');
+  });
+
+  it('セミコロンは前に空白を入れず、次の文を1行空けて始める', () => {
+    const out = format('select a from t; select b from u');
+    expect(out).toBe('SELECT a\nFROM t;\n\nSELECT b\nFROM u\n');
+  });
+
+  it('2文目以降もBETWEENの状態を引きずらない', () => {
+    const out = format('select * from t where x between 1 and 5; select * from u where a = 1 and b = 2');
+    expect(out).toContain('WHERE a = 1\n  AND b = 2');
+  });
+});
+
 describe('壊れた入力', () => {
   it('閉じていない文字列でも例外を投げない', () => {
     expect(() => format("select 'mitojiru from t")).not.toThrow();
