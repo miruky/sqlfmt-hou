@@ -123,6 +123,10 @@ export function format(sql: string, options: FormatOptions = {}): string {
     current = indent.repeat(depth + clauseIndent + extra);
   };
   let glueNext = false;
+  // BETWEEN a AND b の AND は論理結合ではなく句の一部なので折り返さない。
+  let betweenPending = false;
+  // セミコロン直後は1行空けて次の文を始める。末尾に余計な空行を残さないため遅延させる。
+  let needBlank = false;
   const append = (text: string): void => {
     if (
       glueNext ||
@@ -141,6 +145,10 @@ export function format(sql: string, options: FormatOptions = {}): string {
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i] as Token;
     const lower = token.text.toLowerCase();
+    if (needBlank) {
+      lines.push('');
+      needBlank = false;
+    }
     if (token.type === 'keyword') {
       const word = uppercase ? token.text.toUpperCase() : lower;
       const isClause = CLAUSE_STARTERS.has(lower);
@@ -167,13 +175,20 @@ export function format(sql: string, options: FormatOptions = {}): string {
       ) {
         clauseIndent = 0;
         newline();
-      } else if ((lower === 'and' || lower === 'or') && current.trim() !== '') {
+      } else if (
+        (lower === 'or' || (lower === 'and' && !betweenPending)) &&
+        current.trim() !== ''
+      ) {
         clauseIndent = 1;
         newline();
         clauseIndent = 0;
       }
       append(word);
       if (isClause && lower !== 'union') clauseIndent = 1;
+      // BETWEENを見たら直後のANDを句の一部として扱い、出会ったANDで解除する。
+      // 句の切り替えでも取りこぼさないよう解除しておく。
+      if (lower === 'between') betweenPending = true;
+      else if (lower === 'and' || isClause) betweenPending = false;
       continue;
     }
     if (token.type === 'quoted') {
@@ -210,6 +225,16 @@ export function format(sql: string, options: FormatOptions = {}): string {
     if (token.type === 'operator' && token.text === '.') {
       current += '.';
       glueNext = true;
+      continue;
+    }
+    if (token.type === 'operator' && token.text === ';') {
+      // 文末。前に空白を入れず、深さと句インデントを戻し、次の文は1行空けて始める。
+      current = current.trimEnd() + ';';
+      flush();
+      depth = 0;
+      clauseIndent = 0;
+      betweenPending = false;
+      needBlank = true;
       continue;
     }
     append(token.text);
