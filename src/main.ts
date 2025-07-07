@@ -1,7 +1,7 @@
 /** sqlfmt-houのUI。入力のたびに整形して右ペインへ出す。 */
 
 import './style.css';
-import { format, type Dialect } from './index';
+import { format, highlightHtml, type Dialect } from './index';
 
 function query<T extends Element>(selector: string): T {
   const el = document.querySelector<T>(selector);
@@ -15,11 +15,14 @@ const dialect = query<HTMLSelectElement>('#dialect');
 const uppercase = query<HTMLInputElement>('#uppercase');
 const copied = query<HTMLSpanElement>('#copied');
 
+let lastFormatted = '';
+
 function render(): void {
-  output.textContent = format(input.value, {
+  lastFormatted = format(input.value, {
     dialect: dialect.value as Dialect,
     uppercase: uppercase.checked,
   });
+  output.innerHTML = highlightHtml(lastFormatted);
 }
 
 input.addEventListener('input', render);
@@ -27,7 +30,7 @@ dialect.addEventListener('input', render);
 uppercase.addEventListener('input', render);
 
 query<HTMLButtonElement>('#copy').addEventListener('click', () => {
-  void navigator.clipboard.writeText(output.textContent ?? '').then(() => {
+  void navigator.clipboard.writeText(lastFormatted).then(() => {
     copied.textContent = 'コピーした';
     setTimeout(() => (copied.textContent = ''), 1600);
   });
