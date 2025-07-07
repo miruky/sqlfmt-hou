@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="description"
+      content="ブラウザで動くSQLフォーマッタ。引用符とLIMIT句の方言変換つき"
+    />
+    <link rel="icon" type="image/svg+xml" href="./logo.svg" />
+    <title>sqlfmt-hou - SQLフォーマッタ+方言変換</title>
+  </head>
+  <body>
+    <main>
+      <header class="hero">
+        <img src="./logo.svg" width="44" height="44" alt="" aria-hidden="true" />
+        <div>
+          <h1>sqlfmt-hou</h1>
+          <p class="lead">SQLを整形し、識別子の引用符とLIMIT句を方言に合わせる</p>
+        </div>
+      </header>
+
+      <div class="toolbar">
+        <label
+          >方言
+          <select id="dialect">
+            <option value="standard" selected>標準SQL("x" / FETCH FIRST)</option>
+            <option value="mysql">MySQL(`x` / LIMIT)</option>
+            <option value="sqlserver">SQL Server([x] / TOP)</option>
+          </select>
+        </label>
+        <label class="check"
+          ><input type="checkbox" id="uppercase" checked />キーワードを大文字に</label
+        >
+        <button id="copy" type="button">結果をコピー</button>
+        <span id="copied" role="status"></span>
+      </div>
+
+      <div class="panes">
+        <textarea id="input" spellcheck="false" aria-label="入力SQL">
+select u.id, u.name, count(o.id) as orders from users u left join orders o on o.user_id = u.id where u.active = 1 and u.created_at >= '2026-01-01' group by u.id, u.name order by orders desc limit 10 offset 20</textarea
+        >
+        <pre id="output" aria-label="整形結果" aria-live="polite"></pre>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

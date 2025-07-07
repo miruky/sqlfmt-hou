@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 240" role="img" aria-label="sqlfmt-houの処理の流れ">
+  <title>sqlfmt-houの処理の流れ。トークナイザが文字列とコメントを塊で切り、方言変換がLIMITと引用符を書き換え、整形器が句単位で並べ直す。</title>
+  <style>
+    svg {
+      --ink: #1f2328;
+      --accent: #2e7fb8;
+      color: var(--ink);
+    }
+    @media (prefers-color-scheme: dark) {
+      svg { --ink: #e6edf3; --accent: #6db3e8; }
+    }
+    .box { fill: none; stroke: currentColor; stroke-width: 1.5; }
+    .accent-box { fill: none; stroke: var(--accent); stroke-width: 2; }
+    .label { font: 600 14px "Hiragino Sans", "Noto Sans JP", sans-serif; fill: currentColor; }
+    .note { font: 11px "Hiragino Sans", "Noto Sans JP", sans-serif; fill: currentColor; opacity: 0.65; }
+    .flow { stroke: currentColor; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <rect x="30" y="70" width="150" height="100" rx="8" class="box"/>
+  <text x="50" y="98" class="label">入力SQL</text>
+  <text x="50" y="120" class="note">どの方言でもよい</text>
+
+  <rect x="240" y="70" width="160" height="100" rx="8" class="box"/>
+  <text x="260" y="98" class="label">tokenize</text>
+  <text x="260" y="120" class="note">文字列・引用識別子・</text>
+  <text x="260" y="138" class="note">コメントを塊で切る</text>
+
+  <rect x="460" y="70" width="160" height="100" rx="8" class="accent-box"/>
+  <text x="480" y="98" class="label">方言変換</text>
+  <text x="480" y="120" class="note">LIMIT ↔ TOP / FETCH</text>
+  <text x="480" y="138" class="note">引用符の付け替え</text>
+
+  <rect x="660" y="70" width="130" height="100" rx="8" class="box"/>
+  <text x="680" y="98" class="label">整形</text>
+  <text x="680" y="120" class="note">句で改行・</text>
+  <text x="680" y="138" class="note">1段インデント</text>
+
+  <path d="M 180 120 L 240 120" class="flow"/>
+  <path d="M 400 120 L 460 120" class="flow"/>
+  <path d="M 620 120 L 660 120" class="flow"/>
+</svg>
