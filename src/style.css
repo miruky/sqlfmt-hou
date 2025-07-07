@@ -5,6 +5,14 @@
   --muted: #6a6f76;
   --line: #e4e2dd;
   --accent: #2e7fb8;
+
+  /* シンタックスハイライトの配色。地色になじむ低彩度でそろえる。 */
+  --syn-keyword: #1d6fb8;
+  --syn-string: #2f7d4f;
+  --syn-number: #9a6212;
+  --syn-comment: #8a8f97;
+  --syn-quoted: #1f8a8a;
+  --syn-operator: #6a6f76;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,6 +23,13 @@
     --muted: #9aa0a8;
     --line: #2c2f36;
     --accent: #6db3e8;
+
+    --syn-keyword: #6db3e8;
+    --syn-string: #84c79c;
+    --syn-number: #e0b070;
+    --syn-comment: #7c828b;
+    --syn-quoted: #5fc5c5;
+    --syn-operator: #9aa0a8;
   }
 }
 
@@ -119,22 +134,51 @@ pre {
   margin: 0;
   min-height: 380px;
   padding: 16px 18px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--line);
   background: var(--panel);
   color: var(--ink);
   font-family: 'SF Mono', Menlo, monospace;
   font-size: 13px;
   line-height: 1.7;
-  white-space: pre-wrap;
-  word-break: break-all;
 }
 
 textarea {
   resize: vertical;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* 整形結果は折り返さずに横スクロールさせ、トークンを途中で割らない。 */
+pre {
+  white-space: pre;
+  overflow: auto;
+  tab-size: 2;
 }
 
 textarea:focus {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
+}
+
+.tok-keyword {
+  color: var(--syn-keyword);
+  font-weight: 600;
+}
+.tok-string {
+  color: var(--syn-string);
+}
+.tok-number {
+  color: var(--syn-number);
+}
+.tok-comment {
+  color: var(--syn-comment);
+  font-style: italic;
+}
+.tok-quoted {
+  color: var(--syn-quoted);
+}
+.tok-operator,
+.tok-punct {
+  color: var(--syn-operator);
 }
