@@ -65,6 +65,8 @@ FETCH NEXT 10 ROWS ONLY
 | `LIMIT 10`                         | `FETCH FIRST 10 ROWS ONLY`               | `LIMIT 10`   | `SELECT TOP 10`                    |
 | `LIMIT 10 OFFSET 20`               | `OFFSET 20 ROWS FETCH NEXT 10 ROWS ONLY` | そのまま     | 標準形(OFFSETはORDER BY必須のため) |
 
+入力と設定はブラウザに自動保存され、次に開いたときも続きから使える。「共有リンク」を押すと、SQLと方言・大文字化の設定を `#s=...` に畳んだURLがクリップボードに入る。このリンクを送れば、相手の画面に同じSQLと同じ設定が開く——状態はすべてURLの中にあり、サーバーは介さない。
+
 ライブラリとしても使える:
 
 ```ts
@@ -80,6 +82,7 @@ format('select `id` from t limit 5', { dialect: 'sqlserver' });
   - `tokenize.ts` — 文字列・引用識別子・コメントを壊さないトークナイザ
   - `format.ts` — 整形と方言変換(LIMIT・引用符)
   - `highlight.ts` — トークナイザを使い、空白を保ったまま結果を色分けするHTMLを作る
+  - `share.ts` — 入力と設定をURLへ畳む共有状態の符号化・復号
   - `main.ts` + `index.html` — 2ペインのUI
 - `.github/workflows/` — CIとPagesデプロイ
 

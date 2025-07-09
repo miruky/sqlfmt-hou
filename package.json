@@ -1,7 +1,7 @@
 {
   "name": "sqlfmt-hou",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "description": "ブラウザで動くSQLフォーマッタ。引用符とLIMIT句の方言変換つき",
   "scripts": {
