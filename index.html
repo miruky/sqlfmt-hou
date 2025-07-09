@@ -22,19 +22,24 @@
       </header>
 
       <div class="toolbar">
-        <label
-          >方言
-          <select id="dialect">
-            <option value="standard" selected>標準SQL("x" / FETCH FIRST)</option>
-            <option value="mysql">MySQL(`x` / LIMIT)</option>
-            <option value="sqlserver">SQL Server([x] / TOP)</option>
-          </select>
-        </label>
-        <label class="check"
-          ><input type="checkbox" id="uppercase" checked />キーワードを大文字に</label
-        >
-        <button id="copy" type="button">結果をコピー</button>
-        <span id="copied" role="status"></span>
+        <div class="tool-group">
+          <label
+            >方言
+            <select id="dialect">
+              <option value="standard" selected>標準SQL("x" / FETCH FIRST)</option>
+              <option value="mysql">MySQL(`x` / LIMIT)</option>
+              <option value="sqlserver">SQL Server([x] / TOP)</option>
+            </select>
+          </label>
+          <label class="check"
+            ><input type="checkbox" id="uppercase" checked />キーワードを大文字に</label
+          >
+        </div>
+        <div class="tool-group tool-actions">
+          <button id="copy" type="button">結果をコピー</button>
+          <button id="share" type="button">共有リンク</button>
+          <span id="copied" role="status"></span>
+        </div>
       </div>
 
       <div class="panes">
@@ -43,6 +48,8 @@ select u.id, u.name, count(o.id) as orders from users u left join orders o on o.
         >
         <pre id="output" aria-label="整形結果" aria-live="polite"></pre>
       </div>
+
+      <p class="stats" id="stats" aria-live="polite"></p>
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
